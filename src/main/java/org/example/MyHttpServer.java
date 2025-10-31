@@ -17,6 +17,8 @@ public class MyHttpServer {
         httpServer.bind(new InetSocketAddress(port), backlog);
         httpServer.createContext("/hello", new MyHttpHandler());
         httpServer.start();
+
+        System.out.println("HTTP-сервер запущен на " + port + " порту!");
     }
 }
 
