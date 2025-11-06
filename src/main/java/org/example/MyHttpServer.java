@@ -27,13 +27,15 @@ public class MyHttpServer {
 }
 
 class MyHttpHandler implements HttpHandler {
-    private static Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String response = "Hey! Glad to see you on our server.";
+        String[] parts = exchange.getRequestURI().getPath().split("/");
+        String name = (parts.length >= 3) ? parts[2] : "";
+        String response = "Hey " + name + "! Glad to see you on our server.";
         System.out.println(exchange.getRequestMethod());
-        System.out.println(exchange.getRequestHeaders());
+        System.out.println(exchange.getRequestHeaders().entrySet());
         System.out.println(exchange.getRequestURI().getPath());
         System.out.println(exchange.getRequestURI().getPort());
         System.out.println(exchange.getRequestURI().getQuery());
