@@ -1,5 +1,6 @@
 package org.example;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -10,6 +11,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class MyHttpServer {
     public static void main(String[] args) throws IOException {
@@ -34,6 +36,17 @@ class MyHttpHandler implements HttpHandler {
         String[] parts = exchange.getRequestURI().getPath().split("/");
         String name = (parts.length >= 3) ? parts[2] : "";
         String response = "Hey " + name + "! Glad to see you on our server.";
+        String profession = (parts.length >= 4) ? parts[3] : "";
+        Headers requestHeaders = exchange.getRequestHeaders();
+        if (requestHeaders.containsKey("X-Wish-Good-Day")) {
+            List<String> values = requestHeaders.get("X-Wish-Good-Day");
+            System.out.println(values);
+
+            if (values.contains("true")) {
+                response = "Hello " + profession + " " + name + "! Have a good day!";
+            }
+        }
+
         System.out.println(exchange.getRequestMethod());
         System.out.println(exchange.getRequestHeaders().entrySet());
         System.out.println(exchange.getRequestURI().getPath());
