@@ -9,13 +9,14 @@ import java.net.http.HttpResponse;
 public class MyHttpClient {
     public static void main(String[] args) throws IOException, InterruptedException {
 //        URI uri = URI.create("https://httpstatuses.com/418");
-        URI uri = URI.create("http://httpbin.org/status/404");
+//        URI uri = URI.create("http://httpbin.org/status/404");
+        URI uri = URI.create("https://api.agify.io?name=Pixel");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .uri(uri)
                 .version(HttpClient.Version.HTTP_1_1)
-                .header("Accept", "text/html")
+                .header("Accept", "application/json")
                 .build();
 
         HttpClient client = HttpClient.newHttpClient();
@@ -34,6 +35,8 @@ public class MyHttpClient {
             if (status >= 400 && status <= 499) {
                 System.out.println("Сервер сообщил о проблеме с запросом. Код состояния: " + status);
             }
+
+            System.out.println("Ответ: " + response.body());
 
         } catch (IOException ioe) {
             System.out.println("Во время выполнения запроса возникла ошибка");
