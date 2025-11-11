@@ -1,5 +1,6 @@
 package org.example;
 
+import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -33,6 +34,11 @@ class MyHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        Owner owner = new Owner("John", "Smith", 1111);
+        Dog dog = new Dog("Jack", 5, owner);
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(dog);
+
         String[] parts = exchange.getRequestURI().getPath().split("/");
         String name = (parts.length >= 3) ? parts[2] : "";
         String response = "Hey " + name + "! Glad to see you on our server.";
@@ -59,7 +65,7 @@ class MyHttpHandler implements HttpHandler {
         exchange.sendResponseHeaders(200, 0);
 
         try (OutputStream os = exchange.getResponseBody()) {
-            os.write(response.getBytes());
+            os.write(jsonString.getBytes());
         }
     }
 }
