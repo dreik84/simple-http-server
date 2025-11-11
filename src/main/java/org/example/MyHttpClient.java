@@ -1,5 +1,10 @@
 package org.example;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,7 +15,8 @@ public class MyHttpClient {
     public static void main(String[] args) throws IOException, InterruptedException {
 //        URI uri = URI.create("https://httpstatuses.com/418");
 //        URI uri = URI.create("http://httpbin.org/status/404");
-        URI uri = URI.create("https://api.agify.io?name=Pixel");
+//        URI uri = URI.create("https://api.agify.io?name=Pixel");
+        URI uri = URI.create("http://localhost:8080/hello");
 
         HttpRequest request = HttpRequest.newBuilder()
                 .GET()
@@ -35,6 +41,24 @@ public class MyHttpClient {
             if (status >= 400 && status <= 499) {
                 System.out.println("Сервер сообщил о проблеме с запросом. Код состояния: " + status);
             }
+
+            JsonElement jsonElement = JsonParser.parseString(response.body());
+
+            if (jsonElement.isJsonObject()) {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                System.out.println(jsonObject.get("name"));
+                System.out.println(jsonObject.get("age"));
+
+                if (jsonObject.get("owner").isJsonObject()) {
+                    JsonObject owner = jsonObject.getAsJsonObject("owner");
+                    System.out.println(owner.get("firstName"));
+                    System.out.println(owner.get("lastName"));
+                    System.out.println(owner.get("phoneNumber"));
+                }
+            } else {
+                JsonArray jsonArray = jsonElement.getAsJsonArray();
+            }
+
 
             System.out.println("Ответ: " + response.body());
 
