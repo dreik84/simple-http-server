@@ -1,4 +1,4 @@
-package org.example;
+package org.example.http;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
