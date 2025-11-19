@@ -3,6 +3,8 @@ package org.example.socket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class MySocketClient {
 
@@ -54,7 +56,24 @@ public class MySocketClient {
         }
 
         try {
-            // TODO
+            ClientSocket clientSocket = new ClientSocket(new Socket(domain, port));
+            String message = "";
+
+            while (!message.equals("#exit")) {
+                System.out.print("| ");
+                message = reader.readLine();
+                clientSocket.sendMessage(message);
+            }
+
+            System.out.println("[INFO] Закрытие чата...");
+
+            clientSocket.closeClient();
+        } catch (UnknownHostException e) {
+            System.out.println("[ERROR] Неизвестный хост");
+        } catch (IOException e) {
+            System.out.println("[ERROR] Че-то пошло не так");
+        } catch (Exception e) {
+            System.out.println("[ERROR] Ошибка");
         }
     }
 }
